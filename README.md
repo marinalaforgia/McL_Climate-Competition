@@ -19,16 +19,16 @@ The script used to generate the project's analysis is titled "Final-Paper-Analys
 
 Intermediates (these files are saved and read in to save time)
 * Boostrapped confidence intervals for figures
-+ CI-1.Rdata
-+ CI-2.Rdata
-+ CI-3.Rdata
-+ CI-4.Rdata
+  + CI-1.Rdata
+  + CI-2.Rdata
+  + CI-3.Rdata
+  + CI-4.Rdata
 * Bootstrapped parameters for Lambda
-+ BS-m.Rdata
-+ BS-F.Rdata
-+ BS-g.Rdata
+  + BS-m.Rdata
+  + BS-F.Rdata
+  + BS-g.Rdata
 * Final Lambda constructed from bootstrapped parameters
-+ 20190206-lambda-sim.Rdata
+  + 20190206-lambda-sim.Rdata
 
 ## Data Processing
 For data processing workflow from raw data files, see "data-processing.docx" in the Data folder
