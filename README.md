@@ -1,6 +1,6 @@
 # McL_Climate-Competition
 
-This is the repository for chapter 2 of my dissertation investigating the interactive effects of precipitation variability and competition from invasive annual grasses on native annual forbs that vary in drought strategies. The project manuscript titled "Invasive species reduce the relative success of drought-avoiding plant species under a variable climate." Coauthors include Dr. Andrew Latimer and Dr. Susan Harrison.
+This is the repository for chapter 2 of my dissertation investigating the interactive effects of precipitation variability and competition from invasive annual grasses on native annual forbs that vary in drought strategies. The project manuscript titled "Invasive species reduce the relative success of drought-avoiding plant species under a variable climate." Coauthors include Dr. Andrew Latimer and Dr. Susan Harrison. The most recent version of this manuscript can be found in the manuscript folder with the most recent date: 01-25-2019.
 
 The project seeks to answer how competition with a novel group alters the ability of native forbs to cope with a variable climate, namely drought or increased rainfall. 
 
