@@ -1,12 +1,12 @@
 # McL_Climate-Competition
 
-This is the repository for chapter 2 of my dissertation investigating the interactive effects of precipitation variability and competition from invasive annual grasses on native annual forbs that vary in drought strategies. The project manuscript titled "Invasive species reduce the relative success of drought-avoiding plant species under a variable climate." Coauthors include Dr. Andrew Latimer and Dr. Susan Harrison. The most recent version of this manuscript can be found in the manuscript folder with the most recent date: 01-25-2019.
+This is the repository for chapter 2 of my dissertation investigating the interactive effects of precipitation variability and competition from invasive annual grasses on native annual forbs that vary in drought tolerance. The project manuscript titled "Invasive species reduce the relative success of drought-avoiding plant species under a variable climate", can be found in the manuscript folder (most recent version: "20190225-LaForgia.docx"). Coauthors include Dr. Andrew Latimer and Dr. Susan Harrison. 
 
 The project seeks to answer how competition with a novel group alters the ability of native forbs to cope with a variable climate, namely drought or increased rainfall. 
 
 ## Analyses
 
-The script used to generate the project's analysis is titled "Final-Paper-Analysis-112018" and lives in the "Scripts" folder. To run this script, the following post-processing data files are needed:
+The script used to generate the project's analysis is titled "Final-Paper-Analysis-112018" and sound in the "Scripts" folder. To run this script, the following post-processing data files are needed:
 
 * __grass-cover.csv__: data on grass cover per subplot; not ultimately used
 * __Marina-Treatment-30.csv__: experimental design
@@ -17,7 +17,7 @@ The script used to generate the project's analysis is titled "Final-Paper-Analys
 * __final-traits-w.csv__: trait data
 * __final-sla-13c.csv__: trait data, includes more species; not ultimately used
 
-Intermediates (these files are saved and read in to save time)
+Intermediates (these files are created by the script, but can be read in to save time)
 * Boostrapped confidence intervals for figures
   + CI-1.Rdata
   + CI-2.Rdata
@@ -28,7 +28,7 @@ Intermediates (these files are saved and read in to save time)
   + BS-F.Rdata
   + BS-g.Rdata
 * Final Lambda constructed from bootstrapped parameters
-  + 20190206-lambda-sim.Rdata
+  + 20190206-lambda-sim-sum.Rdata
 
 ## Data Processing
 For data processing workflow from raw data files, see "data-processing.docx" in the Data folder
