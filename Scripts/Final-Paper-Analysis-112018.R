@@ -1,4 +1,4 @@
-#### FINAL PAPER SCRIPT ####
+### FINAL PAPER SCRIPT ###
 
 # Chapter 2 analysis 11-20-2018 #
 
@@ -26,10 +26,11 @@ load("Data/Analysis-output/CI/CI-2.Rdata") # seed set
 load("Data/Analysis-output/CI/CI-3.Rdata") # seed bank carryover
 load("Data/Analysis-output/CI/CI-4.Rdata") # germination
 
-# Parameter boots (need to redo mortality with set seed sometime)
+# Parameter boots
 load("Data/Analysis-output/Param-sims/BS-m.Rdata") # mortality
 load("Data/Analysis-output/Param-sims/BS-F.Rdata") # seed set
 load("Data/Analysis-output/Param-sims/BS-g.Rdata") # germination
+load("Data/Analysis-output/20190206-lambda-sim.Rdata")
 
 #### Prep: Vital Rates ####
 
@@ -346,9 +347,10 @@ L.sim <- merge(L.sim, later, by = "Scenario")
 
 B.L <- L.sim[,c(8:11,3:7)]
 
-B.L <- ddply(B.L, .(Species, Treat.Code, Subplot, PC.F), summarize, L = mean(L), g = mean(g), sb = mean(s), m = mean(m), Fe = mean(Fe))
+B.L.sum <- ddply(B.L, .(Species, Treat.Code, Subplot, PC.F), summarize, L = mean(L), g = mean(g), sb = mean(s), m = mean(m), Fe = mean(Fe))
 
 save(B.L, file = "Data/Analysis-output/20190206-lambda-sim.Rdata")
+save(B.L.sum, file = "Data/Analysis-output/20190206-lambda-sim-sum.Rdata")
 
 rm(g.sim, s.sim, m.sim, F.sim, params, pm, i, j, later, Scenario, sim.list, sims, BS, L.sim)
 
@@ -358,14 +360,14 @@ rm(g.sim, s.sim, m.sim, F.sim, params, pm, i, j, later, Scenario, sim.list, sims
 ###
 # Lambda with seed survival averages
 ###
-B.L$Treat.Code <- factor(B.L$Treat.Code, levels = c("C", "D", "W"))
-B.L$Subplot <- factor(B.L$Subplot, levels = c("N", "G"))
-B.L$Subplot <- revalue(B.L$Subplot, c("N" = "No Grass", "G" = "Grass"))
-hist(B.L$L)
-hist(log(B.L$L))
-hist(log(B.L$L + 1))
-B.L$log.L <- log(B.L$L + 1)
-m7.trait <- lm(log.L ~ Treat.Code * Subplot * PC.F, B.L)
+B.L.sum$Treat.Code <- factor(B.L.sum$Treat.Code, levels = c("C", "D", "W"))
+B.L.sum$Subplot <- factor(B.L.sum$Subplot, levels = c("N", "G"))
+B.L.sum$Subplot <- revalue(B.L.sum$Subplot, c("N" = "No Grass", "G" = "Grass"))
+hist(B.L.sum$L)
+hist(log(B.L.sum$L))
+hist(log(B.L.sum$L + 1))
+B.L.sum$log.L <- log(B.L.sum$L + 1)
+m7.trait <- lm(log.L ~ Treat.Code * Subplot * PC.F, B.L.sum)
 plot(fitted(m7.trait), resid(m7.trait))
 qqnorm(resid(m7.trait))
 qqline(resid(m7.trait), col = 2, lwd = 2, lty = 2) 
@@ -546,7 +548,7 @@ ggplot(sb.sum.trt, aes(y = p.surv, x = Treat.Code)) +
 
 
 #### Fig 4: L v PC ####
-plot.lambda <- ggplot(B.L, aes(y = L, x = PC.F, col = Treat.Code, group = Treat.Code)) +
+plot.lambda <- ggplot(B.L.sum, aes(y = L, x = PC.F, col = Treat.Code, group = Treat.Code)) +
   geom_point() +
   theme_classic() +
   theme(legend.title = element_blank(), 
