@@ -389,8 +389,8 @@ plot.trait <- ggplot(trait.w, aes(x = D13C.F, y = RGR.la.F)) +
   geom_text(aes(label = Species.short), hjust = .5, vjust = .5) +
   labs(y = "Relative Growth Rate", x = "Water Use Efficiency") +
   theme(axis.text = element_text(size = 10), 
-        plot.title = element_text(size=30, face="bold", vjust = 2),
-        axis.title = element_text(size = 15), 
+        plot.title = element_text(size = 30, face="bold", vjust = 2),
+        axis.title = element_text(size = 13), 
         strip.text = element_text(size = 15),
         axis.line = element_blank(),
         panel.border = element_rect(colour = "black", fill = NA, size = 1)) +
@@ -398,7 +398,7 @@ plot.trait <- ggplot(trait.w, aes(x = D13C.F, y = RGR.la.F)) +
   labs(x = "Carbon isotope discrimination", y = "Relative Growth Rate")
   #labs(x = "Carbon isotope discrimination (∆, \u2030)", y = expression(paste("Relative Growth Rate (", cm^{2}, ")"%.%"(", cm^{2}, ")"^{-1}%.%day^{-1})))
 
-ggsave(plot.trait, filename = "Figures/trait.pdf", width = 100, height = 90, units = "mm", dpi = 600)
+ggsave(plot.trait, filename = "Figures/trait.tiff", width = 82, height = 75, units = "mm", dpi = 600)
 
 #### Fig 2: Mortality v PC ####
 dem.sum <- summarySE(dem, measurevar = "p.mort", groupvars = c("Treat.Code", "Subplot", "Species", "PC.F"), na.rm = T)
@@ -427,7 +427,7 @@ plot.m1.trait.d <- ggplot(dem.sum[dem.sum$Treat.Code != "W",], aes(y = p.mort, x
   facet_wrap(~ Subplot) +
   geom_line(data = CI.1[CI.1$Treat.Code != "W",], aes(y = p.mort))
 
-ggsave(plot.m1.trait.d, filename = "Figures/mortality-trait-d.pdf", width = 150, height = 90, units = "mm", dpi = 600)
+ggsave(plot.m1.trait.d, filename = "Figures/mortality-trait-d.tiff", width = 173, height = 90, units = "mm", dpi = 600)
 
 # control and water  
 plot.m1.trait.w <- ggplot(dem.sum[dem.sum$Treat.Code != "D",], aes(y = p.mort, x = PC.F, col = Treat.Code, group = Treat.Code)) +
@@ -451,7 +451,7 @@ plot.m1.trait.w <- ggplot(dem.sum[dem.sum$Treat.Code != "D",], aes(y = p.mort, x
   facet_wrap(~ Subplot) +
   geom_line(data = CI.1[CI.1$Treat.Code != "D",], aes(y = p.mort))
 
-ggsave(plot.m1.trait.w, filename = "Figures/mortality-trait-w.pdf", width = 150, height = 90, units = "mm", dpi = 600)
+ggsave(plot.m1.trait.w, filename = "Figures/mortality-trait-w.tiff", width = 173, height = 90, units = "mm", dpi = 600)
 
 #### Fig 3: Fecund v PC ####
 
@@ -478,7 +478,7 @@ plot.m2.trait.d <- ggplot(flo.seed.sum[flo.seed.sum$Treat.Code != "W",], aes(y =
   facet_wrap(~ Subplot) +
   geom_line(data = CI.2[CI.2$Treat.Code != "W",], aes(y = exp(n.seed.ind) - 1))
 
-ggsave(plot.m2.trait.d, filename = "Figures/seedset-trait-d.pdf", width = 150, height = 90, units = "mm", dpi = 600)
+ggsave(plot.m2.trait.d, filename = "Figures/seedset-trait-d.tiff", width = 173, height = 90, units = "mm", dpi = 600)
 
 ## Watering
 plot.m2.trait.w <- ggplot(flo.seed.sum[flo.seed.sum$Treat.Code != "D",], aes(y = n.seed.ind, x = PC.F, col = Treat.Code, group = Treat.Code)) +
@@ -500,7 +500,7 @@ plot.m2.trait.w <- ggplot(flo.seed.sum[flo.seed.sum$Treat.Code != "D",], aes(y =
   facet_wrap(~ Subplot) +
   geom_line(data = CI.2[CI.2$Treat.Code != "D",], aes(y = exp(n.seed.ind) - 1))
 
-ggsave(plot.m2.trait.w, filename = "Figures/seedset-trait-w.pdf", width = 150, height = 90, units = "mm", dpi = 600)
+ggsave(plot.m2.trait.w, filename = "Figures/seedset-trait-w.tiff", width = 173, height = 90, units = "mm", dpi = 600)
 
 #### Fig: Germ v PC ####
 germ.sum <- summarySE(filter(dem, !(Species == "Lasthenia californica" & Year == 2016), !(Species == "Plantago erecta" & Year == 2016)), measurevar = "p.germ", groupvars = c("Species", "PC.F", "Year"), na.rm = T)
@@ -565,4 +565,4 @@ plot.lambda <- ggplot(B.L.sum, aes(y = L, x = PC.F, col = Treat.Code, group = Tr
   facet_wrap(~ Subplot) +
   geom_line(data = B.L.CI, aes(y = exp(fit)-1))
 
-ggsave(plot.lambda , filename = "Figures/lambda.pdf", width = 150, height = 90, units = "mm", dpi = 600)
+ggsave(plot.lambda , filename = "Figures/lambda.tiff", width = 173, height = 90, units = "mm", dpi = 600)
