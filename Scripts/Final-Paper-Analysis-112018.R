@@ -126,11 +126,11 @@ full <- merge(full, sb, by = c("Year","Plot","Treat.Code","Species","PC.F", "PC.
 
 full$p.germ <- full$germ.tot/full$viable
 full$L.sb <- full$p.surv*(1-full$p.germ)
-full$L.sa <- ifelse(full$germ.proj > 0 , ((full$germ.proj - full$tot.mort)/full$germ.proj), 0)
+full$L.sa <- ifelse(full$germ.proj > 0 , full$p.germ * (1 - (full$tot.mort/full$germ.proj)), 0) 
 full$L.seeds <- ifelse(full$n.seed.ind >= 0, full$L.sa * full$n.seed.ind, 0)
 
-full$L <- ifelse(full$L.sa == 0,  full$L.sb, full$L.sa*full$L.seeds) #15 missing 
-
+full$L <- full$L.sb + full$L.seeds 
+full <- filter(full, !(Species == "Lasthenia californica" & Year == 2016), !(Species == "Plantago erecta" & Year == 2016)) # get rid of lasthenia and plantago in 2016 beacuse of germination mix-up
 
 #### M1: Mortality ####
 dem$Year <- as.factor(dem$Year)
@@ -168,6 +168,14 @@ plot(fitted(m4.trait), resid(m4.trait))
 qqnorm(resid(m4.trait))
 qqline(resid(m4.trait), col = 2, lwd = 2, lty = 2)
 summary(m4.trait)
+
+#### M5: Plot Lambda ####
+hist(log(full$L + .5))
+m5.trait <- lmer(log(L + 0.5) ~ Treat.Code * Subplot * PC.F + (1|Year:Plot:Species), data = full)
+plot(fitted(m5.trait), resid(m5.trait))
+qqnorm(resid(m5.trait))
+qqline(resid(m5.trait), col = 2, lwd = 2, lty = 2)
+summary(m5.trait)
 
 #### Prep: Bootstrap CIs ####
 
@@ -503,7 +511,7 @@ plot.m2.trait.w <- ggplot(flo.seed.sum[flo.seed.sum$Treat.Code != "D",], aes(y =
 ggsave(plot.m2.trait.w, filename = "Figures/seedset-trait-w.tiff", width = 173, height = 90, units = "mm", dpi = 600)
 
 #### Fig: Germ v PC ####
-germ.sum <- summarySE(filter(dem, !(Species == "Lasthenia californica" & Year == 2016), !(Species == "Plantago erecta" & Year == 2016)), measurevar = "p.germ", groupvars = c("Species", "PC.F", "Year"), na.rm = T)
+germ.sum <- summarySE(filter(dem, !(Species == "Lasthenia californica" & Year == 2016), !(Species == "Plantago erecta" & Year == 2016)), measurevar = "p.germ", groupvars = c("Species", "PC.F"), na.rm = T)
 
 ggplot(germ.sum, aes(y = p.germ, x = PC.F)) +
   geom_point() +
