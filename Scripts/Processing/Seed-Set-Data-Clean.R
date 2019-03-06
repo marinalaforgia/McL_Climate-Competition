@@ -638,7 +638,7 @@ grass.seed <- rbind(grass.seed.16, grass.seed.17)
 
 grass.seed <- ddply(grass.seed, .(Year, Treat.Code, Plot, Subplot, Species), summarize, n.seed.inf = mean(n.seed.inf))
 
-write.table(grass.seed, "McL_Grass_Seed-set.csv", sep = ",")
+write.table(grass.seed, "McL_Grass_Seed-set.csv", sep = ",", row.names = F)
 
 grass.seed.sum <- summarySE(grass.seed, groupvars = c("Year", "Treat.Code", "Subplot", "Species"), measurevar = "n.seed.inf")
 
