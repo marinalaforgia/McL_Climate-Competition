@@ -12,7 +12,6 @@ library(lme4)
 library(tidyr)
 library(reshape)
 library(gridExtra)
-# plots <- "Plots/"
 
 ##### Load datasets ####
 
@@ -210,6 +209,9 @@ ggplot(filter(seed.16.sum, Species != "Avena fatua", Species != "Bromus hordeace
   geom_line() +
   facet_wrap(~ Species) +
   theme_classic() # seeds per inf only changes in SA
+
+# Grass seed 2016
+grass.seed.16 <- filter(seed.16, Species == "Avena fatua" | Species == "Bromus hordeaceus" | Species == "Taeniatherum caput-medusae"| Species == "Lolium multiflorum" | Species == "Vulpia microstachys")
 
 #### 2016: Flower + Seed ####
 # get avg seed set per individual by combining two average datasets
@@ -494,6 +496,9 @@ ggplot(filter(seed.17.sum, Species != "Avena fatua", Species != "Bromus hordeace
   facet_wrap(~ Species) +
   theme_classic() # no big outliers
 
+# Save grass seed
+grass.seed.17 <- filter(seed.17, Species == "Avena fatua" | Species == "Bromus hordeaceus" | Species == "Taeniatherum caput-medusae"| Species == "Lolium multiflorum" | Species == "Vulpia microstachys")
+
 #### 2017: Flower + Seed ####
 # get avg seed set per individual by combining two average datasets
 seed.avg <- ddply(seed.17, .(Year, Plot, Subplot, Species), summarize, avg.seed = mean(n.seed.inf))
@@ -628,38 +633,26 @@ write.table(flo.long, "Data/Cleaned Data for Analysis/final-flo-long.csv", sep =
 write.table(seed, "Data/Cleaned Data for Analysis/final-seed-long.csv", sep = ",", row.names = F)
 
 #### Treatment effects on grasses ####
-ggplot(filter(seed.16.sum, Species == "Avena fatua" | Species == "Bromus hordeaceus"| Species == "Lolium multiflorum"| Species == "Taeniatherum caput-medusae"), aes(x = Treat.Code, y = n.seed.inf)) +
+# this is number of seeds PER individual, also may not be informative as they are just averages anyway, might need to look at plot level instead of individual level
+grass.seed <- rbind(grass.seed.16, grass.seed.17)
+
+grass.seed <- ddply(grass.seed, .(Year, Treat.Code, Plot, Subplot, Species), summarize, n.seed.inf = mean(n.seed.inf))
+
+write.table(grass.seed, "McL_Grass_Seed-set.csv", sep = ",")
+
+grass.seed.sum <- summarySE(grass.seed, groupvars = c("Year", "Treat.Code", "Subplot", "Species"), measurevar = "n.seed.inf")
+
+ggplot(grass.seed.sum[grass.seed.sum$Subplot == "Grass",], aes(x = Treat.Code, y = n.seed.inf)) +
   geom_point() +
   geom_errorbar(aes(ymin = n.seed.inf - se, ymax = n.seed.inf + se), width = 0.02) +
   geom_line() +
-  facet_wrap(~ Species) +
+  facet_wrap(~ Species + Year) +
   theme_classic() 
 
-grass.seed <- ddply(filter(seed.16, Species == "Avena fatua" | Species == "Bromus hordeaceus"| Species == "Lolium multiflorum"| Species == "Taeniatherum caput-medusae"), .(Plot, Year, Species, Treat.Code), summarize, n.seed.inf = mean(n.seed.inf))
-grass.seed$Treat.Code <- factor(grass.seed$Treat.Code, levels = c("C", "D", "W"))
-hist(grass.seed$n.seed.inf)
 hist(log(grass.seed$n.seed.inf))
-mg.16 <- lmer(log(n.seed.inf) ~ Treat.Code + (1|Plot), data = grass.seed)
+mg.16 <- lmer(log(n.seed.inf) ~ Treat.Code + (1|Plot:Species), data = grass.seed[grass.seed$Subplot == "Grass",])
 plot(fitted(mg.16), resid(mg.16))
 qqnorm(resid(mg.16)) 
 qqline(resid(mg.16), col = 2, lwd = 2, lty = 2) 
 summary(mg.16) # no difs
 
-ggplot(filter(seed.17.sum, Species == "Avena fatua" | Species == "Bromus hordeaceus"| Species == "Lolium multiflorum"| Species == "Taeniatherum caput-medusae", Subplot == "Grass"), aes(x = Treat.Code, y = n.seed.inf)) +
-  geom_point() +
-  geom_errorbar(aes(ymin = n.seed.inf - se, ymax = n.seed.inf + se), width = 0.02) +
-  geom_line() +
-  facet_wrap(~ Species) +
-  theme_classic() 
-
-grass.seed.17 <- ddply(filter(seed.17, Species == "Avena fatua" | Species == "Bromus hordeaceus"| Species == "Lolium multiflorum"| Species == "Taeniatherum caput-medusae", Subplot == "Grass"), .(Plot, Year, Species, Treat.Code), summarize, n.seed.inf = mean(n.seed.inf))
-grass.seed.17$Treat.Code <- factor(grass.seed.17$Treat.Code, levels = c("C", "D", "W"))
-grass.seed <- rbind(grass.seed, grass.seed.17)
-hist(grass.seed$n.seed.inf)
-hist(log(grass.seed$n.seed.inf))
-
-mg <- lmer(log(n.seed.inf) ~ Treat.Code + (1|Species) + (1|Year), data = grass.seed)
-plot(fitted(mg), resid(mg))
-qqnorm(resid(mg)) 
-qqline(resid(mg), col = 2, lwd = 2, lty = 2) 
-summary(mg) # no difs
