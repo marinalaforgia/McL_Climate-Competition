@@ -21,8 +21,10 @@ d$Species <- revalue(d$Species, c("AGHE" = "Agoseris heterophylla", "CLGR" = "Cl
 d <- filter(d, Species != "LUBI")
 d[is.na(d)] <- 0
 d$Species <- factor(d$Species)
-d <- filter(d, Plot != 87, Plot != 85, Plot != 86) #removed plots 85, 86, and 87 due to burrow damage
 
+# removed plots 85, 86, and 87 due to burrow damage early in the season
+# grass plots in 82 and 89 because of less than 10& grass cover
+d <- filter(d, Plot != 87, Plot != 85, Plot != 86, !(Plot == 82 & Subplot == "Grass"), !(Plot == 89 & Subplot == "Grass"))
 
 ###
 # Separate flowering and germ/mortality data
