@@ -414,7 +414,7 @@ fig.lam.g <- ggplot(full.grass, aes(y = L, x = Subplot, col = strat, group = str
         legend.key.size = unit(1.5, 'lines'),
         axis.line = element_blank(),
         panel.border = element_rect(colour = "black", fill = NA, size = 1)) +
-  scale_color_manual(values = c("#3CBB75FF", "#440154FF"), labels = c("Drought avoider", "Drought tolerator")) +
+  scale_color_manual(values = c("darkcyan", "#440154FF"), labels = c("Drought avoider", "Drought tolerator")) +
   #scale_color_viridis_d() +
   ylim(0,25) +
   labs(y = "Lambda")
@@ -581,7 +581,7 @@ Fig.surv <- ggplot(surv.sum, aes(y = p.surv, x = strat, fill = Treat.Code, group
         axis.line = element_blank(),
         panel.border = element_rect(colour = "black", fill = NA, size = 1)) +
   scale_y_continuous(labels = scales::percent_format(accuracy = 1), limits = c(0,1)) +
-  labs(y = "Seed Survival") +
+  labs(y = "Seed survival") +
   scale_fill_manual(values = c("grey40", "red1", "blue"), labels = c("Control", "Drought", "Watered"))
 
 ggsave(Fig.surv, filename = "Figures/Fig-surv.tiff", width = 3, height = 2.5, units = "in", dpi = 600)
