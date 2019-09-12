@@ -162,18 +162,20 @@ flo.16.long.sum <- summarySE(flo.16.long, measurevar = "n.flo", groupvars = c("T
 
 flo.16.long.sum$Treat.Code <- factor(flo.16.long.sum$Treat.Code, levels = c("D", "C", "W"))
 
-ggplot(flo.16.long.sum, aes(x = Treat.Code, y = n.flo, col = Subplot, group = Subplot)) +
-  geom_point() +
-  geom_errorbar(aes(ymin = n.flo - se, ymax = n.flo + se), width = 0.02) +
-  geom_line() +
-  facet_wrap(~ Species) +
-  theme_classic() # most species dont alter flower number
+# ggplot(flo.16.long.sum, aes(x = Treat.Code, y = n.flo, col = Subplot, group = Subplot)) +
+#   geom_point() +
+#   geom_errorbar(aes(ymin = n.flo - se, ymax = n.flo + se), width = 0.02) +
+#   geom_line() +
+#   facet_wrap(~ Species) +
+#   theme_classic() # most species dont alter flower number
 
 #### 2016: Seed ####
 # Get rid of plots with burrow damage early in the season that ended up decreasing grass cover
 ## Early burrow damage: 85, 86, 87
 ## Post mortality damage: 15, not removing
-seed.16 <- filter(seed.16, Plot != 87, Plot != 85, Plot != 86)
+## Remove two plots where grass cover never got above 10% (89 & 82)
+
+seed.16 <- filter(seed.16, Plot != 87, Plot != 85, Plot != 86, !(Plot == 82 & Subplot == "A"), !(Plot == 89 & Subplot == "A"))
 
 seed.16$Subplot <- revalue(seed.16$Subplot, c("A" = "Grass", "B" = "No Grass"))
 seed.16$Species <- revalue(seed.16$Species, c("AGHE" = "Agoseris heterophylla", "CLGR" = "Clarkia purpurea", "LACA" = "Lasthenia californica", "PLER" = "Plantago erecta", "HECO" = "Hemizonia congesta", "AVFA" = "Avena fatua", "LOMU" = "Lolium multiflorum", "BRHO" = "Bromus hordeaceus", "TACA" = "Taeniatherum caput-medusae", "VUMI" = "Vulpia microstachys"))
@@ -484,17 +486,17 @@ seed.17.sum <- summarySE(seed.17, measurevar = "n.seed.inf", groupvars = c("Trea
 
 seed.17.sum$Treat.Code <- factor(seed.17.sum$Treat.Code, levels = c("D", "C", "W"))
 
-ggplot(filter(seed.17.sum, Species != "Avena fatua", Species != "Bromus hordeaceus", Species != "Lolium multiflorum", Species != "Taeniatherum caput-medusae"), aes(x = Treat.Code, y = n.seed.inf, col = Subplot, group = Subplot)) +
-  geom_point() +
-  geom_errorbar(aes(ymin = n.seed.inf - se, ymax = n.seed.inf + se), width = 0.02) +
-  geom_line() +
-  facet_wrap(~ Species) +
-  theme_classic() # no big outliers
-
-ggplot(filter(seed.17.sum, Species != "Avena fatua", Species != "Bromus hordeaceus", Species != "Lolium multiflorum", Species != "Taeniatherum caput-medusae"), aes(x = Treat.Code, y = n.seed.inf, col = Subplot, by = Subplot)) +
-  geom_point() +
-  facet_wrap(~ Species) +
-  theme_classic() # no big outliers
+# ggplot(filter(seed.17.sum, Species != "Avena fatua", Species != "Bromus hordeaceus", Species != "Lolium multiflorum", Species != "Taeniatherum caput-medusae"), aes(x = Treat.Code, y = n.seed.inf, col = Subplot, group = Subplot)) +
+#   geom_point() +
+#   geom_errorbar(aes(ymin = n.seed.inf - se, ymax = n.seed.inf + se), width = 0.02) +
+#   geom_line() +
+#   facet_wrap(~ Species) +
+#   theme_classic() # no big outliers
+# 
+# ggplot(filter(seed.17.sum, Species != "Avena fatua", Species != "Bromus hordeaceus", Species != "Lolium multiflorum", Species != "Taeniatherum caput-medusae"), aes(x = Treat.Code, y = n.seed.inf, col = Subplot, by = Subplot)) +
+#   geom_point() +
+#   facet_wrap(~ Species) +
+#   theme_classic() # no big outliers
 
 # Save grass seed
 grass.seed.17 <- filter(seed.17, Species == "Avena fatua" | Species == "Bromus hordeaceus" | Species == "Taeniatherum caput-medusae"| Species == "Lolium multiflorum" | Species == "Vulpia microstachys")
@@ -512,12 +514,9 @@ seed.avg <- rbind(seed.avg, combos)
 seed.flo.17 <- merge(flo.17.summary, seed.avg, by = c("Year", "Plot", "Subplot", "Species"), all = T)
 seed.flo.17 <- filter(seed.flo.17, Species != "Avena fatua", Species != "Bromus hordeaceus", Species != "Lolium multiflorum", Species != "Taeniatherum caput-medusae", Species != "Vulpia microstachys")
 seed.flo.17 <- merge(seed.flo.17, unique(treat[,c(1,3)]))
+
 # HECO only ever has 5 seeds per flower, replace with average because sometimes they are eaten
 seed.flo.17[seed.flo.17$Species == "Hemizonia congesta",]$avg.seed <- ifelse(is.na(seed.flo.17[seed.flo.17$Species == "Hemizonia congesta",]$avg.seed) == T, mean(seed.flo.17[seed.flo.17$Species == "Hemizonia congesta",]$avg.seed, na.rm = T), seed.flo.17[seed.flo.17$Species == "Hemizonia congesta",]$avg.seed) 
-
-# CAPA only ever has max 5 seeds per flower, replace with average because sometimes they are eaten
-seed.flo.17[seed.flo.17$Species == "Calycadenia pauciflora",]$avg.seed <- ifelse(is.na(seed.flo.17[seed.flo.17$Species == "Calycadenia pauciflora",]$avg.seed) == T, mean(seed.flo.17[seed.flo.17$Species == "Calycadenia pauciflora",]$avg.seed, na.rm = T), seed.flo.17[seed.flo.17$Species == "Calycadenia pauciflora",]$avg.seed)
-
 
 seed.flo.17$n.seed.ind <- seed.flo.17$avg.seed*seed.flo.17$avg.flo
 
@@ -628,9 +627,9 @@ seed <- rbind(seed.16, seed.17)
 
 rm(final.16, final.17, flo.16.long, flo.17.long, seed.16, seed.17)
 
-write.table(final, "Data/Cleaned Data for Analysis/final-flo-seed.csv", sep = ",", row.names = F)
-write.table(flo.long, "Data/Cleaned Data for Analysis/final-flo-long.csv", sep = ",", row.names = F)
-write.table(seed, "Data/Cleaned Data for Analysis/final-seed-long.csv", sep = ",", row.names = F)
+write.table(final, "Data/Post-Processing/final-flo-seed.csv", sep = ",", row.names = F)
+write.table(flo.long, "Data/Post-Processing/final-flo-long.csv", sep = ",", row.names = F)
+write.table(seed, "Data/Post-Processing/final-seed-long.csv", sep = ",", row.names = F)
 
 #### Treatment effects on grasses ####
 # this is number of seeds PER individual, also may not be informative as they are just averages anyway, might need to look at plot level instead of individual level
@@ -638,7 +637,7 @@ grass.seed <- rbind(grass.seed.16, grass.seed.17)
 
 grass.seed <- ddply(grass.seed, .(Year, Treat.Code, Plot, Subplot, Species), summarize, n.seed.inf = mean(n.seed.inf))
 
-write.table(grass.seed, "McL_Grass_Seed-set.csv", sep = ",", row.names = F)
+write.table(grass.seed, "Data/Post-Processing/McL_Grass_Seed-set.csv", sep = ",", row.names = F)
 
 grass.seed.sum <- summarySE(grass.seed, groupvars = c("Year", "Treat.Code", "Subplot", "Species"), measurevar = "n.seed.inf")
 
