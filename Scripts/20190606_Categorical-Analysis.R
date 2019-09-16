@@ -290,7 +290,15 @@ K3 <- rbind("D.N.ST - C.N.ST" = D.N.ST - C.N.ST,
 
            "D.G.ST - D.N.ST" = D.G.ST - D.N.ST,
            "W.G.ST - W.N.ST" = W.G.ST - W.N.ST,
-           "C.G.ST - C.N.ST" = C.G.ST - C.N.ST)
+           "C.G.ST - C.N.ST" = C.G.ST - C.N.ST,
+           
+           "D.G.ST - D.G.SA" = D.G.ST - D.G.SA,
+           "W.G.ST - W.G.SA" = W.G.ST - W.G.SA,
+           "C.G.ST - C.G.SA" = C.G.ST - C.G.SA,
+
+           "D.N.ST - D.N.SA" = D.N.ST - D.N.SA,
+           "W.N.ST - W.N.SA" = W.N.ST - W.N.SA,
+           "C.N.ST - C.N.SA" = C.N.ST - C.N.SA)
 
             
 summary(glht(m2.trait, linfct = K3), test = adjusted("BH"))    
