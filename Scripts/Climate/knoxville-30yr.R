@@ -10,7 +10,7 @@ setwd("/Users/Marina/Google Drive/02_McLaughlin_80Sites_Organized")
 
 # Update file name for daily data below with current date 
 # Update current year 
-currentyr <- 2018
+currentyr <- 2019
 
 #### Load libraries ####
 #install.packages("plyr")
@@ -19,7 +19,7 @@ library(plyr)
 library(dplyr)
 
 #### Read in data ####
-daily <- read.delim(file.choose(), header = F, sep = "", skip = 6, strip.white = T, blank.lines.skip = T) # update with current date
+daily <- read.csv("/Users/Marina/Documents/UC-Davis/Projects/McL_Climate-Competition/Data/Climate/Weather-station/knoxville_daily_data120319.csv", header = F, sep = ",", skip = 6, strip.white = T, blank.lines.skip = T, fileEncoding="UTF-8") # update with current date
 
 # there are 6 lines of text above data, check to make sure this isn't cutting off actual data
 head(daily)
