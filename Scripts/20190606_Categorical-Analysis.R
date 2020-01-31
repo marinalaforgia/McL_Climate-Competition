@@ -339,81 +339,23 @@ summary(glht(m5.trait, linfct = K), test = adjusted("BH"))
 #### Fig 1: RGR v WUE ####
 trait.w$Species.short <- revalue(trait.w$Species, c("Agoseris heterophylla" =  "AGHE", "Calycadenia pauciflora" = "CAPA", "Clarkia purpurea" = "CLPU", "Hemizonia congesta" = "HECO", "Lasthenia californica" = "LACA", "Plantago erecta" = "PLER"))
 
-
 plot.trait <- ggplot(trait.w, aes(x = D13C.F, y = RGR.la.F)) +
   theme_classic() +
   geom_smooth(method = "lm", se = F, col = "black", size = 1) +
-  geom_text(aes(label = Species.short), hjust = .5, vjust = .5) +
+  geom_text(aes(label = Species.short), hjust = .5, vjust = .5, size = 3) +
   labs(y = "Relative Growth Rate", x = "Water Use Efficiency") +
   theme(axis.text = element_text(size = 10), 
-        plot.title = element_text(size = 30, face="bold", vjust = 2),
-        axis.title = element_text(size = 13), 
-        strip.text = element_text(size = 15),
+        axis.title = element_text(size = 12), 
+        strip.text = element_text(size = 13),
         axis.line = element_blank(),
         panel.border = element_rect(colour = "black", fill = NA, size = 1)) +
   scale_x_reverse(lim = c(25, 20)) +
   labs(x = "Carbon isotope discrimination", y = "Relative growth rate")
   #labs(x = "Carbon isotope discrimination (∆, \u2030)", y = expression(paste("Relative Growth Rate (", cm^{2}, ")"%.%"(", cm^{2}, ")"^{-1}%.%day^{-1})))
 
-ggsave(plot.trait, filename = "Figures/trait.tiff", width = 3, height = 2.7, units = "in", dpi = 600)
+ggsave(plot.trait, filename = "Figures/Final/Fig-1.jpeg", width = 3, height = 2.7, units = "in", dpi = 600)
 
-#### Fig 2: Lambda NAF ####
-(full.all <- summarySE(full, groupvars = c("Treat.Code", "Subplot"), measurevar = "L", na.rm = T))
-full.all$Subplot <- revalue(full.all$Subplot, c("No Grass" = "No grass"))
-
-fig.lam.all <- ggplot(full.all, aes(y = L, x = Subplot, col = Treat.Code, group = Treat.Code)) +
-  geom_point() +
-  geom_line() +
-  geom_errorbar(aes(ymin = L - se, ymax = L + se, width = 0.06)) +
-  theme_classic() +
-  theme(legend.title = element_blank(), 
-        axis.text.y = element_text(size = 10), 
-        plot.title = element_text(size=30, face="bold", vjust = 2),
-        axis.title.y = element_text(size = 15), 
-        axis.text.x = element_text(size = 13, colour = "black"),
-        axis.title.x = element_blank(),
-        strip.background = element_blank(),
-        strip.text = element_text(size = 15),
-        legend.text = element_text(size = 10),
-        legend.position = c(0.77, 0.74),
-        legend.key.size = unit(1.5, 'lines'),
-        axis.line = element_blank(),
-        panel.border = element_rect(colour = "black", fill = NA, size = 1)) +
-  scale_color_manual(values = c("grey40", "red1", "blue"), labels = c("Control", "Drought", "Watered")) +
-  labs(y = "Lambda")
-
-ggsave(fig.lam.all, filename = "Figures/Fig-lam-all.tiff", width = 3, height = 2.7, units = "in", dpi = 600)
-
-#### Fig 3: Lambda Grass ####
-(full.grass <- summarySE(full, groupvars = c("strat", "Subplot"), measurevar = "L", na.rm = T))
-full.grass$Subplot <- revalue(full.grass$Subplot, c("No Grass" = "No grass"))
-
-fig.lam.g <- ggplot(full.grass, aes(y = L, x = Subplot, col = strat, group = strat)) +
-  geom_point() +
-  geom_line() +
-  geom_errorbar(aes(ymin = L - se, ymax = L + se, width = 0.06)) +
-  theme_classic() +
-  theme(legend.title = element_blank(), 
-        axis.text.y = element_text(size = 10), 
-        plot.title = element_text(size=30, face="bold", vjust = 2),
-        axis.title.y = element_text(size = 15), 
-        axis.text.x = element_text(size = 13, colour = "black"),
-        axis.title.x = element_blank(),
-        strip.background = element_blank(),
-        strip.text = element_text(size = 15),
-        legend.text = element_text(size = 10),
-        legend.position = c(0.66, 0.81),
-        legend.key.size = unit(1.5, 'lines'),
-        axis.line = element_blank(),
-        panel.border = element_rect(colour = "black", fill = NA, size = 1)) +
-  scale_color_manual(values = c("darkcyan", "#440154FF"), labels = c("Acquisitive", "Conservative")) +
-  #scale_color_viridis_d() +
-  ylim(0,25) +
-  labs(y = "Lambda")
-
-ggsave(fig.lam.g, filename = "Figures/Fig-lam-grass.tiff", width = 3, height = 2.7, units = "in", dpi = 600)
-
-#### Fig 4: Lambda ####
+#### Fig 2: Lambda ####
 full.sum <- summarySE(full, measurevar = "L", groupvars = c("Treat.Code", "Subplot", "strat"), na.rm = T)
 full.sum$strat <- revalue(full.sum$strat, c("SA" = "Acquisitive", "ST" = "Conservative"))
 full.sum$Subplot <- revalue(full.sum$Subplot, c("No Grass" = "No grass"))
@@ -425,13 +367,12 @@ Fig.lam <- ggplot(full.sum, aes(y = L, x = Subplot, col = Treat.Code, group = Tr
   theme_classic() +
   theme(legend.title = element_blank(), 
         axis.text.y = element_text(size = 10), 
-        plot.title = element_text(size=30, face="bold", vjust = 2),
-        axis.title.y = element_text(size = 15), 
-        axis.text.x = element_text(size = 13, colour = "black"),
+        axis.title.y = element_text(size = 12), 
+        axis.text.x = element_text(size = 12, colour = "black"),
         axis.title.x = element_blank(),
         strip.background = element_blank(),
-        strip.text = element_text(size = 15),
-        legend.text = element_text(size = 12),
+        strip.text = element_text(size = 13),
+        legend.text = element_text(size = 10),
         legend.position = c(0.87, 0.75),
         legend.key.size = unit(1.5, 'lines'),
         axis.line = element_blank(),
@@ -440,9 +381,9 @@ Fig.lam <- ggplot(full.sum, aes(y = L, x = Subplot, col = Treat.Code, group = Tr
   labs(y = "Lambda") +
   facet_wrap(~ strat) 
 
-ggsave(Fig.lam, filename = "Figures/Fig-lam.tiff", width = 6, height = 3, units = "in", dpi = 600)
+ggsave(Fig.lam, filename = "Figures/Final/Fig-2.jpeg", width = 6, height = 3, units = "in", dpi = 600)
 
-#### Fig 5: Mortality ####
+#### Fig 3: Mortality ####
 dem.sum2 <- summarySE(dem, measurevar = "p.mort", groupvars = c("Treat.Code", "Subplot", "strat"), na.rm = T)
 dem.sum2$strat <- revalue(dem.sum2$strat, c("SA" = "Acquisitive", "ST" = "Conservative"))
 dem.sum2$Subplot <- revalue(dem.sum2$Subplot, c("No Grass" = "No grass"))
@@ -454,12 +395,11 @@ Fig.Mort <- ggplot(dem.sum2, aes(y = p.mort, x = Subplot, col = Treat.Code, grou
   theme_classic() +
   theme(legend.title = element_blank(), 
         axis.text.y = element_text(size = 10), 
-        plot.title = element_text(size=30, face="bold", vjust = 2),
-        axis.title.y = element_text(size = 15), 
-        axis.text.x = element_text(size = 13, colour = "black"),
+        axis.title.y = element_text(size = 12), 
+        axis.text.x = element_text(size = 12, colour = "black"),
         axis.title.x = element_blank(),
-        strip.text = element_text(size = 15),
-        legend.text = element_text(size = 12),
+        strip.text = element_text(size = 13),
+        legend.text = element_text(size = 10),
         legend.position = c(0.12, 0.75),
         legend.key.size = unit(1.5, 'lines'),
         axis.line = element_blank(),
@@ -470,9 +410,9 @@ Fig.Mort <- ggplot(dem.sum2, aes(y = p.mort, x = Subplot, col = Treat.Code, grou
   labs(y = "Mortality") +
   facet_wrap(~ strat) 
 
-ggsave(Fig.Mort, filename = "Figures/Fig-mort.tiff", width = 6, height = 3, units = "in", dpi = 600)
+ggsave(Fig.Mort, filename = "Figures/Final/Fig-3.jpeg", width = 6, height = 3, units = "in", dpi = 600)
 
-#### Fig 6: Seed Set ####
+#### Fig 4: Seed Set ####
 flo.seed.sum2 <- summarySE(flo.seed, measurevar = "n.seed.ind", groupvars = c("Treat.Code", "Subplot", "strat"), na.rm = T)
 flo.seed.sum2$strat <- revalue(flo.seed.sum2$strat, c("SA" = "Acquisitive", "ST" = "Conservative"))
 flo.seed.sum2$Subplot <- revalue(flo.seed.sum2$Subplot, c("No Grass" = "No grass"))
@@ -484,13 +424,12 @@ Fig.seed <- ggplot(flo.seed.sum2, aes(y = n.seed.ind, x = Subplot, col = Treat.C
   theme_classic() +
   theme(legend.title = element_blank(), 
         axis.text.y = element_text(size = 10), 
-        plot.title = element_text(size = 30, face="bold", vjust = 2),
-        axis.title.y = element_text(size = 15), 
-        axis.text.x = element_text(size = 13, colour = "black"),
+        axis.title.y = element_text(size = 12), 
+        axis.text.x = element_text(size = 12, colour = "black"),
         axis.title.x = element_blank(),
         strip.background = element_blank(),
-        strip.text = element_text(size = 15),
-        legend.text = element_text(size = 12),
+        strip.text = element_text(size = 13),
+        legend.text = element_text(size = 10),
         legend.position = c(0.87, 0.75),
         legend.key.size = unit(1.5, 'lines'),
         axis.line = element_blank(),
@@ -499,10 +438,79 @@ Fig.seed <- ggplot(flo.seed.sum2, aes(y = n.seed.ind, x = Subplot, col = Treat.C
   labs(y = "Seed Set") +
   facet_wrap(~ strat) 
 
-ggsave(Fig.seed, filename = "Figures/Fig-seed.tiff", width = 6, height = 3, units = "in", dpi = 600)
+ggsave(Fig.seed, filename = "Figures/Final/Fig-4.jpeg", width = 6, height = 3, units = "in", dpi = 600)
 
+#### Fig S1: Greenhouse based traits ####
+plot.trait2 <- ggplot(trait.w, aes(x = D13C.GH, y = RGRt.GH)) +
+  theme_classic() +
+  geom_smooth(method = "lm", se = F, col = "black", size = 1) +
+  geom_text(aes(label = Species.short), hjust = .5, vjust = .5) +
+  theme(axis.text = element_text(size = 10), 
+        plot.title = element_text(size = 30, face="bold", vjust = 2),
+        axis.title = element_text(size = 13), 
+        strip.text = element_text(size = 15),
+        axis.line = element_blank(),
+        panel.border = element_rect(colour = "black", fill = NA, size = 1)) +
+  scale_x_reverse(lim = c(25.3, 22.3)) +
+  labs(x = "Carbon isotope discrimination", y = "Relative growth rate")
 
-#### Fig. S1: Germination ####
+ggsave(plot.trait2, filename = "Figures/trait-gh.tiff", width = 3, height = 2.5, units = "in", dpi = 600)
+
+#### Fig S2: Lambda NAF ####
+(full.all <- summarySE(full, groupvars = c("Treat.Code", "Subplot"), measurevar = "L", na.rm = T))
+full.all$Subplot <- revalue(full.all$Subplot, c("No Grass" = "No grass"))
+
+fig.lam.all <- ggplot(full.all, aes(y = L, x = Subplot, col = Treat.Code, group = Treat.Code)) +
+  geom_point() +
+  geom_line() +
+  geom_errorbar(aes(ymin = L - se, ymax = L + se, width = 0.06)) +
+  theme_classic() +
+  theme(legend.title = element_blank(), 
+        axis.text.y = element_text(size = 10), 
+        axis.title.y = element_text(size = 12), 
+        axis.text.x = element_text(size = 13, colour = "black"),
+        axis.title.x = element_blank(),
+        strip.background = element_blank(),
+        strip.text = element_text(size = 13),
+        legend.text = element_text(size = 9),
+        legend.position = c(0.77, 0.74),
+        legend.key.size = unit(1.5, 'lines'),
+        axis.line = element_blank(),
+        panel.border = element_rect(colour = "black", fill = NA, size = 1)) +
+  scale_color_manual(values = c("grey40", "red1", "blue"), labels = c("Control", "Drought", "Watered")) +
+  labs(y = "Lambda")
+
+ggsave(fig.lam.all, filename = "Figures/Final/Fig-S2.tiff", width = 3, height = 2.7, units = "in", dpi = 600)
+
+#### Fig S3: Lambda Grass ####
+(full.grass <- summarySE(full, groupvars = c("strat", "Subplot"), measurevar = "L", na.rm = T))
+full.grass$Subplot <- revalue(full.grass$Subplot, c("No Grass" = "No grass"))
+
+fig.lam.g <- ggplot(full.grass, aes(y = L, x = Subplot, col = strat, group = strat)) +
+  geom_point() +
+  geom_line() +
+  geom_errorbar(aes(ymin = L - se, ymax = L + se, width = 0.06)) +
+  theme_classic() +
+  theme(legend.title = element_blank(), 
+        axis.text.y = element_text(size = 10), 
+        axis.title.y = element_text(size = 12), 
+        axis.text.x = element_text(size = 13, colour = "black"),
+        axis.title.x = element_blank(),
+        strip.background = element_blank(),
+        strip.text = element_text(size = 13),
+        legend.text = element_text(size = 9),
+        legend.position = c(0.66, 0.81),
+        legend.key.size = unit(1.5, 'lines'),
+        axis.line = element_blank(),
+        panel.border = element_rect(colour = "black", fill = NA, size = 1)) +
+  scale_color_manual(values = c("darkcyan", "#440154FF"), labels = c("Acquisitive", "Conservative")) +
+  #scale_color_viridis_d() +
+  ylim(0,25) +
+  labs(y = "Lambda")
+
+ggsave(fig.lam.g, filename = "Figures/Fig-lam-grass.tiff", width = 3, height = 2.7, units = "in", dpi = 600)
+
+#### Fig S4: Germination ####
 germ.sum2 <- summarySE(filter(dem, !(Species == "Lasthenia californica" & Year == 2016), !(Species == "Plantago erecta" & Year == 2016)), measurevar = "p.germ", groupvars = c("strat"), na.rm = T)
 germ.sum2$strat <- revalue(germ.sum2$strat, c("SA" = "Acquisitive", "ST" = "Conservative"))
 
@@ -528,7 +536,7 @@ Fig.germ <- ggplot(germ.sum2, aes(y = p.germ, x = strat)) +
 
 ggsave(Fig.germ, filename = "Figures/Fig-germ.tiff", width = 3, height = 2.5, units = "in", dpi = 600)
 
-#### Fig. S2: Seed survival ####
+#### Fig S5: Seed survival ####
 surv.sum <- summarySE(full, measurevar = "p.surv", groupvars = c("strat", "Treat.Code"), na.rm = T)
 surv.sum$Treat.Code <- factor(surv.sum$Treat.Code, c("D", "C", "W"))
 surv.sum$strat <- revalue(surv.sum$strat, c("SA" = "Acquisitive", "ST" = "Conservative"))
@@ -556,7 +564,7 @@ Fig.surv <- ggplot(surv.sum, aes(y = p.surv, x = strat, fill = Treat.Code, group
 
 ggsave(Fig.surv, filename = "Figures/Fig-surv.tiff", width = 3, height = 2.5, units = "in", dpi = 600)
 
-#### Fig. S3: Spp level lambda ####
+#### Fig S6: Spp level lambda ####
 full.sum2 <- summarySE(full, measurevar = "L", groupvars = c("Treat.Code", "Subplot", "Species", "strat", "Year"), na.rm = T)
 full.sum2$strat <- revalue(full.sum2$strat, c("SA" = "Drought avoider", "ST" = "Drought tolerator"))
 full.sum2$Subplot <- revalue(full.sum2$Subplot, c("No Grass" = "No grass"))
@@ -611,7 +619,7 @@ Fig.SI6.b <- ggplot(full.sum2[full.sum2$strat == "Drought tolerator",], aes(y = 
 
 ggsave(Fig.SI6.b, filename = "Figures/Fig-SI6-b.tiff", width = 6, height = 2.5, units = "in", dpi = 600)
 
-#### Fig. S4: Spp mortality ####
+#### Fig S7: Spp mortality ####
 dem.sum3 <- summarySE(dem, measurevar = "p.mort", groupvars = c("Treat.Code", "Subplot", "Species", "strat"), na.rm = T)
 dem.sum3$strat <- revalue(dem.sum3$strat, c("SA" = "Drought avoider", "ST" = "Drought tolerator"))
 dem.sum3$Subplot <- revalue(dem.sum3$Subplot, c("No Grass" = "No grass"))
@@ -666,7 +674,7 @@ Fig.MortT.SI <- ggplot(dem.sum3[dem.sum3$strat == "Drought tolerator",], aes(y =
 
 ggsave(Fig.MortT.SI, filename = "Figures/Fig-SI1-b.tiff", width = 6, height = 2.5, units = "in", dpi = 600)
 
-#### Fig. S5: Spp seed set ####
+#### Fig S8: Spp seed set ####
 flo.seed.sum3 <- summarySE(flo.seed, measurevar = "n.seed.ind", groupvars = c("Treat.Code", "Subplot", "Species", "strat"), na.rm = T)
 flo.seed.sum3$Species <- factor(flo.seed.sum3$Species, levels = c("Agoseris heterophylla", "Lasthenia californica", "Plantago erecta", "Clarkia purpurea", "Hemizonia congesta", "Calycadenia pauciflora"))
 flo.seed.sum3$strat <- revalue(flo.seed.sum3$strat, c("SA" = "Drought avoider", "ST" = "Drought tolerator"))
@@ -722,39 +730,7 @@ Fig.SI2.b <- ggplot(flo.seed.sum3[flo.seed.sum3$strat == "Drought tolerator",], 
 
 ggsave(Fig.SI2.b, filename = "Figures/Fig-SI2-b.tiff", width = 6, height = 2.5, units = "in", dpi = 600)
 
-#### Fig. S6: Spp germination ####
-germ.sum3 <- summarySE(filter(dem, !(Species == "Lasthenia californica" & Year == 2016), !(Species == "Plantago erecta" & Year == 2016)), measurevar = "p.germ", groupvars = c("strat", "Species"), na.rm = T)
-#germ.sum3 <- summarySE(dem, measurevar = "p.germ", groupvars = c("strat", "Species"), na.rm = T)
-germ.sum3$strat <- revalue(germ.sum3$strat, c("SA" = "Acquisitive", "ST" = "Conservative"))
-germ.sum3$Species <- factor(germ.sum3$Species, levels = c("Agoseris heterophylla", "Lasthenia californica", "Plantago erecta", "Clarkia purpurea", "Hemizonia congesta", "Calycadenia pauciflora"))
-
-addline_format <- function(x,...){
-    gsub('\\s','\n',x)
-}
-
-Fig.SI3 <- ggplot(germ.sum3, aes(y = p.germ, x = Species, fill = strat)) +
-  geom_bar(stat="identity") +
-  geom_errorbar(aes(ymin = p.germ - se, ymax = p.germ + se, width = 0.06)) +
-  theme_classic() +
-  theme(legend.title = element_blank(),
-        axis.text.y = element_text(size = 10),
-        axis.title.y = element_text(size = 15),
-        axis.text.x = element_text(size = 10),
-        axis.title.x = element_blank(),
-        strip.background = element_blank(),
-        strip.text = element_text(size = 15),
-        legend.text = element_text(size = 12),
-        legend.position = c(.8, .8),
-        legend.key.size = unit(1.5, 'lines'),
-        axis.line = element_blank(),
-        panel.border = element_rect(colour = "black", fill = NA, size = 1)) +
-  scale_y_continuous(labels = scales::percent_format(accuracy = 1), limits = c(0,1)) +
-  scale_x_discrete(labels = addline_format(c("Agoseris heterophylla", "Lasthenia californica", "Plantago erecta", "Clarkia purpurea", "Hemizonia congesta", "Calycadenia pauciflora"))) +
-  labs(y = "Germination")
-
-ggsave(Fig.SI3, filename = "Figures/Fig-SI3.tiff", width = 6, height = 3, units = "in", dpi = 600)
-
-#### Fig. S7: Spp seed survival ####
+#### Fig S9: Spp seed survival ####
 surv.sum2 <- summarySE(sb, measurevar = "p.surv", groupvars = c("strat", "Species", "Treat.Code"), na.rm = T)
 surv.sum2$Treat.Code <- factor(surv.sum2$Treat.Code, c("D", "C", "W"))
 surv.sum2$strat <- revalue(surv.sum2$strat, c("SA" = "Drought avoider", "ST" = "Drought tolerator"))
@@ -809,34 +785,37 @@ Fig.SI5.b <- ggplot(surv.sum2[surv.sum2$strat == "Drought tolerator",], aes(y = 
 
 ggsave(Fig.SI5.b, filename = "Figures/Fig-SI5-b.tiff", width = 6, height = 2.5, units = "in", dpi = 600)
 
-#### Fig. S8: Greenhouse based traits ####
-plot.trait2 <- ggplot(trait.w, aes(x = D13C.GH, y = RGRt.GH)) +
+#### Fig S10: Spp germination ####
+germ.sum3 <- summarySE(filter(dem, !(Species == "Lasthenia californica" & Year == 2016), !(Species == "Plantago erecta" & Year == 2016)), measurevar = "p.germ", groupvars = c("strat", "Species"), na.rm = T)
+#germ.sum3 <- summarySE(dem, measurevar = "p.germ", groupvars = c("strat", "Species"), na.rm = T)
+germ.sum3$strat <- revalue(germ.sum3$strat, c("SA" = "Acquisitive", "ST" = "Conservative"))
+germ.sum3$Species <- factor(germ.sum3$Species, levels = c("Agoseris heterophylla", "Lasthenia californica", "Plantago erecta", "Clarkia purpurea", "Hemizonia congesta", "Calycadenia pauciflora"))
+
+addline_format <- function(x,...){
+    gsub('\\s','\n',x)
+}
+
+Fig.SI3 <- ggplot(germ.sum3, aes(y = p.germ, x = Species, fill = strat)) +
+  geom_bar(stat="identity") +
+  geom_errorbar(aes(ymin = p.germ - se, ymax = p.germ + se, width = 0.06)) +
   theme_classic() +
-  geom_smooth(method = "lm", se = F, col = "black", size = 1) +
-  geom_text(aes(label = Species.short), hjust = .5, vjust = .5) +
-  theme(axis.text = element_text(size = 10), 
-        plot.title = element_text(size = 30, face="bold", vjust = 2),
-        axis.title = element_text(size = 13), 
+  theme(legend.title = element_blank(),
+        axis.text.y = element_text(size = 10),
+        axis.title.y = element_text(size = 15),
+        axis.text.x = element_text(size = 10),
+        axis.title.x = element_blank(),
+        strip.background = element_blank(),
         strip.text = element_text(size = 15),
+        legend.text = element_text(size = 12),
+        legend.position = c(.8, .8),
+        legend.key.size = unit(1.5, 'lines'),
         axis.line = element_blank(),
         panel.border = element_rect(colour = "black", fill = NA, size = 1)) +
-  scale_x_reverse(lim = c(25.3, 22.3)) +
-  labs(x = "Carbon isotope discrimination", y = "Relative growth rate")
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1), limits = c(0,1)) +
+  scale_x_discrete(labels = addline_format(c("Agoseris heterophylla", "Lasthenia californica", "Plantago erecta", "Clarkia purpurea", "Hemizonia congesta", "Calycadenia pauciflora"))) +
+  labs(y = "Germination")
 
-# plot.trait3 <- ggplot(trait.w, aes(x = D13C.GH, y = RGR.la.GH)) +
-#   theme_classic() +
-#   geom_smooth(method = "lm", se = F, col = "black", size = 1) +
-#   geom_text(aes(label = Species.short), hjust = .5, vjust = .5) +
-#   theme(axis.text = element_text(size = 10), 
-#         plot.title = element_text(size = 30, face="bold", vjust = 2),
-#         axis.title = element_text(size = 13), 
-#         strip.text = element_text(size = 15),
-#         axis.line = element_blank(),
-#         panel.border = element_rect(colour = "black", fill = NA, size = 1)) +
-#   scale_x_reverse(lim = c(25.2, 22.5)) +
-#   labs(x = "Carbon isotope discrimination", y = "Relative growth rate")
-
-ggsave(plot.trait2, filename = "Figures/trait-gh.tiff", width = 3, height = 2.5, units = "in", dpi = 600)
+ggsave(Fig.SI3, filename = "Figures/Fig-SI3.tiff", width = 6, height = 3, units = "in", dpi = 600)
 
 #### Table S1: observations per analysis ####
 dem.sum3 <- dem.sum3[,c(1:3,5)]
