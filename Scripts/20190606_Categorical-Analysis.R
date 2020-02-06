@@ -42,8 +42,7 @@ dem.17 <- read.csv("Data/Post-Processing/dem-data-17.csv")
 
 dem <- rbind(dem.16, dem.17)
 dem <- merge(dem, grass, by = c("Year", "Plot", "Subplot", "Treat.Code"), all.x = T)
-dem <- dem[, -c(8,9,12)] # get rid of thatch for now and extra columns
-dem <- dem[dem$Subplot != "Thatch", ] 
+dem <- dem[, -c(8,9,12)] # get rid of extra columns
 dem <- filter(dem, !(Year == 2017 & Treat.Code == "D")) # shelters in 2017 did not apply a drought
 dem$Subplot <- factor(dem$Subplot, levels = c("No Grass", "Grass"))
 dem$p.mort <- dem$tot.mort/dem$germ.proj
@@ -58,7 +57,6 @@ rm(dem.16, dem.17)
 #flo.long <- read.csv("Data/Post-Processing/final-flo-long.csv")
 #seed.long <- read.csv("Data/Post-Processing/final-seed-long.csv")
 flo.seed <- read.csv("Data/Post-Processing/final-flo-seed.csv")
-flo.seed <- flo.seed[flo.seed$Subplot != "Thatch",]
 flo.seed <- filter(flo.seed, !(Year == 2017 & Treat.Code == "D")) 
 flo.seed$Subplot <- factor(flo.seed$Subplot, levels = c("No Grass", "Grass"))
 flo.seed$n.seed.ind <- flo.seed$n.seed.ind * flo.seed$p.viable # adjust for viability
