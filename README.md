@@ -9,7 +9,6 @@ The project seeks to answer how competition with invaders alters the ability of 
 The script used to generate the project's analysis is titled "20190606_Categorical-Analysis" and found in the "Scripts" folder. To run this script, the following post-processing data files are needed:
 
 * __grass-cover.csv__: data on grass cover per subplot
-* __Marina-Treatment-30.csv__: experimental design
 * __dem-data-16.csv__: census data from 2016
 * __dem-data-17.csv__: census data from 2017
 * __final-flo-seed.csv__: seed set and flowering data, both years

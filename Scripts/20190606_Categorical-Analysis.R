@@ -25,8 +25,6 @@ library(sjstats)
 grass <- read.csv("Data/Post-Processing/grass-cover.csv")
 names(grass)[3] <- "cover.g"
 
-treat <- read.csv("Data/Setup/Marina-Treatment-30.csv")
-
 ###
 # Germ and mortality data. 
 ###
